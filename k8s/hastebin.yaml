@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hastebin
+  labels:
+    app: hastebin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hastebin
+  template:
+    metadata:
+      labels:
+        app: hastebin
+    spec:
+      containers:
+      - name: hastebin
+        image: mkodockx/docker-pastebin
+        ports:
+        - containerPort: 80
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hastebin
+  labels:
+    app: hastebin
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: hastebin
+  type: LoadBalancer

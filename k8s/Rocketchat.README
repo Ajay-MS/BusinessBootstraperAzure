@@ -1,0 +1,19 @@
+Follow the doc mentioned at https://ajorloo.medium.com/deploy-rocket-chat-server-using-kubernetes-2d6c4228853
+
+After applying the yaml run the following commands in the mongo DB
+
+```cmd
+
+$ kubectl exec -it rocketmongo-0 mongo
+
+rs.initiate()
+var config = rs.conf()
+config.members[0].host="rocketmongo-0.rocketmongo:27017"
+rs.reconfig(config)
+rs.add("rocketmongo-1.rocketmongo:27017")
+rs.add("rocketmongo-2.rocketmongo:27017")
+rs.status()
+
+```
+
+Then you can configure it on <IP>/setup-wizard
