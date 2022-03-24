@@ -16,18 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.microsoft.businessbootstraper.models.*;
-import com.microsoft.businessbootstraper.repository.BusinessRepository;
+import com.microsoft.businessbootstraper.repository.ConfigurationRepository;
 
 @RestController
-@RequestMapping("/business")
-public class BusinessController {
+@RequestMapping("/configuration")
+public class ConfigurationController {
 
     @Autowired
-    private BusinessRepository repository;
-
-    @Autowired
-    private BusinessProfileRepository profileRepository;
-
+    private ConfigurationRepository repository;
 
     @GetMapping
     public ResponseEntity<String> sayHello() {
@@ -35,23 +31,17 @@ public class BusinessController {
     }
 
     @GetMapping("/api")
-    public List<Business> findAllProfiles() {
+    public List<Configuration> findAllProfiles() {
         //TODO: implement
         return Collections.emptyList();
     }
 
     @GetMapping("/api/{id}")
-    public ResponseEntity<BusinessData> findProfileById(@PathVariable(value = "id") long id) {
-        Optional<Business> profile = repository.findById(id);
+    public ResponseEntity<Configuration> findProfileById(@PathVariable(value = "id") long id) {
+        Optional<Configuration> profile = repository.findById(id);
 
-        Optional<BusinessProfile> bussinessprofile = profileRepository.findById(id);
-
-        BusinessData businessData = new BusinessData();
-
-        if(profile.isPresent() && bussinessprofile.isPresent()) {
-            businessData.SetFromBusiness(profile.get());
-            businessData.SetFromBusinessProfile(bussinessprofile.get());
-            return ResponseEntity.ok().body(businessData);
+        if(profile.isPresent()) {
+            return ResponseEntity.ok().body(profile.get());
         }
         else {
             return ResponseEntity.notFound().build();
@@ -59,7 +49,7 @@ public class BusinessController {
     }
 
     @PostMapping
-    public Business saveProfile(@Validated @RequestBody Business profile) {
+    public Configuration saveProfile(@Validated @RequestBody Configuration profile) {
         return repository.save(profile);
     }
 }

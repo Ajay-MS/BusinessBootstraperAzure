@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.microsoft.businessbootstraper.repository.BusinessProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,18 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.microsoft.businessbootstraper.models.*;
-import com.microsoft.businessbootstraper.repository.BusinessRepository;
+import com.microsoft.businessbootstraper.repository.ArchitectureMetaRepository;
 
 @RestController
-@RequestMapping("/business")
-public class BusinessController {
+@RequestMapping("/architecture-meta")
+public class ArchitectureMetaController {
 
     @Autowired
-    private BusinessRepository repository;
-
-    @Autowired
-    private BusinessProfileRepository profileRepository;
-
+    private ArchitectureMetaRepository repository;
 
     @GetMapping
     public ResponseEntity<String> sayHello() {
@@ -35,23 +30,17 @@ public class BusinessController {
     }
 
     @GetMapping("/api")
-    public List<Business> findAllProfiles() {
+    public List<ArchitectureMeta> findAllProfiles() {
         //TODO: implement
         return Collections.emptyList();
     }
 
     @GetMapping("/api/{id}")
-    public ResponseEntity<BusinessData> findProfileById(@PathVariable(value = "id") long id) {
-        Optional<Business> profile = repository.findById(id);
+    public ResponseEntity<ArchitectureMeta> findProfileById(@PathVariable(value = "id") long id) {
+        Optional<ArchitectureMeta> profile = repository.findById(id);
 
-        Optional<BusinessProfile> bussinessprofile = profileRepository.findById(id);
-
-        BusinessData businessData = new BusinessData();
-
-        if(profile.isPresent() && bussinessprofile.isPresent()) {
-            businessData.SetFromBusiness(profile.get());
-            businessData.SetFromBusinessProfile(bussinessprofile.get());
-            return ResponseEntity.ok().body(businessData);
+        if(profile.isPresent()) {
+            return ResponseEntity.ok().body(profile.get());
         }
         else {
             return ResponseEntity.notFound().build();
@@ -59,7 +48,7 @@ public class BusinessController {
     }
 
     @PostMapping
-    public Business saveProfile(@Validated @RequestBody Business profile) {
+    public ArchitectureMeta saveProfile(@Validated @RequestBody ArchitectureMeta profile) {
         return repository.save(profile);
     }
 }
