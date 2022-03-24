@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rocketmongo
+spec:
+  serviceName: rocketmongo
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rocketmongo
+  template:
+    metadata:
+      labels:
+        app: rocketmongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: rocketmongo
+          image: mongo:4.0
+          command:
+          - mongod
+          - "--bind_ip_all"
+          - "--replSet"
+          - rs0
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+          - name: mongo-volume
+            mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rocketmongo
+  labels:
+    app: rocketmongo
+spec:
+  selector:
+    app: rocketmongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rocketchat-server
+spec:
+  type: LoadBalancer
+  selector:
+    app: rocketchat-server
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketchat-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketchat-server
+  template:
+    metadata:
+      labels:
+        app: rocketchat-server
+    spec:
+      containers:
+        - name: rocketchat-server
+          image: rocketchat/rocket.chat:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://rocketmongo-0.rocketmongo:27017/rocketchat
+            - name: MONGO_OPLOG_URL
+              value: mongodb://rocketmongo-0.rocketmongo:27017/local?replSet=rs0
+          imagePullPolicy: Always
