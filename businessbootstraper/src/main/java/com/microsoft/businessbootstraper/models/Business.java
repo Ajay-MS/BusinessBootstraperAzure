@@ -1,9 +1,16 @@
-package com.example.com.FHL.Db;
+package com.microsoft.businessbootstraper.models;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@ToString
+@NoArgsConstructor
 public class Business {
 
     @javax.persistence.Id
@@ -17,36 +24,4 @@ public class Business {
         Type = type;
     }
 
-    public long getId() {
-        return Id;
-    }
-
-    public void setId(long id) {
-        Id = id;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getType() {
-        return Type;
-    }
-
-    public void setType(String type) {
-        Type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "Business{" +
-                "Id=" + Id +
-                ", Name='" + Name + '\'' +
-                ", Type='" + Type + '\'' +
-                '}';
-    }
 }

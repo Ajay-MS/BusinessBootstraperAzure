@@ -1,9 +1,16 @@
-package com.example.com.FHL.Db;
+package com.microsoft.businessbootstraper.models;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@ToString
+@Data
+@NoArgsConstructor
 public class ArchitectureMeta {
 
     @javax.persistence.Id
@@ -15,42 +22,5 @@ public class ArchitectureMeta {
         Id = id;
         Type = type;
         Structure = structure;
-    }
-
-    public ArchitectureMeta() {
-
-    }
-
-    public long getId() {
-        return Id;
-    }
-
-    public void setId(long id) {
-        Id = id;
-    }
-
-    public String getType() {
-        return Type;
-    }
-
-    public void setType(String type) {
-        Type = type;
-    }
-
-    public String getStructure() {
-        return Structure;
-    }
-
-    public void setStructure(String structure) {
-        Structure = structure;
-    }
-
-    @Override
-    public String toString() {
-        return "ArchitectureMeta{" +
-                "Id=" + Id +
-                ", Type='" + Type + '\'' +
-                ", Structure='" + Structure + '\'' +
-                '}';
     }
 }

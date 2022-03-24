@@ -19,15 +19,11 @@ import com.microsoft.businessbootstraper.models.*;
 import com.microsoft.businessbootstraper.repository.BusinessRepository;
 
 @RestController
-@RequestMapping("/business")
-public class BusinessController {
+@RequestMapping("/business-profile")
+public class BusinessProfileController {
 
     @Autowired
-    private BusinessRepository repository;
-
-    @Autowired
-    private BusinessProfileRepository profileRepository;
-
+    private BusinessProfileRepository repository;
 
     @GetMapping
     public ResponseEntity<String> sayHello() {
@@ -35,23 +31,17 @@ public class BusinessController {
     }
 
     @GetMapping("/api")
-    public List<Business> findAllProfiles() {
+    public List<BusinessProfile> findAllProfiles() {
         //TODO: implement
         return Collections.emptyList();
     }
 
     @GetMapping("/api/{id}")
-    public ResponseEntity<BusinessData> findProfileById(@PathVariable(value = "id") long id) {
-        Optional<Business> profile = repository.findById(id);
+    public ResponseEntity<BusinessProfile> findProfileById(@PathVariable(value = "id") long id) {
+        Optional<BusinessProfile> profile = repository.findById(id);
 
-        Optional<BusinessProfile> bussinessprofile = profileRepository.findById(id);
-
-        BusinessData businessData = new BusinessData();
-
-        if(profile.isPresent() && bussinessprofile.isPresent()) {
-            businessData.SetFromBusiness(profile.get());
-            businessData.SetFromBusinessProfile(bussinessprofile.get());
-            return ResponseEntity.ok().body(businessData);
+        if(profile.isPresent()) {
+            return ResponseEntity.ok().body(profile.get());
         }
         else {
             return ResponseEntity.notFound().build();
@@ -59,7 +49,7 @@ public class BusinessController {
     }
 
     @PostMapping
-    public Business saveProfile(@Validated @RequestBody Business profile) {
+    public BusinessProfile saveProfile(@Validated @RequestBody BusinessProfile profile) {
         return repository.save(profile);
     }
 }

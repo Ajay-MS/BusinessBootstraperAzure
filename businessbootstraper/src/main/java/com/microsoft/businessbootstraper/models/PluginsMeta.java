@@ -5,22 +5,21 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Entity
 @Data
 @ToString
 @NoArgsConstructor
-public class PricingMeta {
+public class PluginsMeta {
 
     @javax.persistence.Id
     private long Id;
     private String Type;
-    private String Pricing;
+    private String Data;
 
-    public PricingMeta(long id, String type, String pricing) {
+    public PluginsMeta(long id, String type, String data) {
         Id = id;
         Type = type;
-        Pricing = pricing;
+        Data = data;
     }
 }
