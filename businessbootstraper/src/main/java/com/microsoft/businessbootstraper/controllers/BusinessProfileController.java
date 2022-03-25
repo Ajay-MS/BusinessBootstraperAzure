@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.microsoft.businessbootstraper.models.*;
-import com.microsoft.businessbootstraper.repository.BusinessRepository;
 
 @RestController
 @RequestMapping("/business-profile")
