@@ -30,6 +30,21 @@ public class BusinessProfileController {
         return ResponseEntity.ok().body("Welcome to the Azure Business Bootstrapper!");
     }
 
+    @GetMapping("/api/{id}/scale/{scale}")
+    public ResponseEntity<BusinessProfile> scale(@PathVariable(value = "id") long id, @PathVariable(value = "scale") int scale)
+    {
+        Optional<BusinessProfile> optionalProfile = repository.findById(id);
+        if(optionalProfile.isPresent())
+        {
+            var profile = optionalProfile.get();
+            profile.setScale(scale);
+            var finalProfile =  repository.save(profile);
+            return ResponseEntity.ok().body(finalProfile);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/api")
     public List<BusinessProfile> findAllProfiles() {
         //TODO: implement

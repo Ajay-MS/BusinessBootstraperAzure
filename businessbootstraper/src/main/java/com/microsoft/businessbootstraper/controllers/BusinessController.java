@@ -1,10 +1,12 @@
 package com.microsoft.businessbootstraper.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.microsoft.businessbootstraper.repository.BusinessProfileRepository;
+import org.hibernate.cfg.CreateKeySecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,8 +38,13 @@ public class BusinessController {
 
     @GetMapping("/api")
     public List<Business> findAllProfiles() {
-        //TODO: implement
-        return Collections.emptyList();
+        var result = new ArrayList<Business>();
+        for(Business b : repository.findAll())
+        {
+            result.add(b);
+        }
+
+        return result;
     }
 
     @GetMapping("/api/{id}")
@@ -48,9 +55,13 @@ public class BusinessController {
 
         BusinessData businessData = new BusinessData();
 
-        if(profile.isPresent() && bussinessprofile.isPresent()) {
+        if(profile.isPresent()) {
             businessData.SetFromBusiness(profile.get());
-            businessData.SetFromBusinessProfile(bussinessprofile.get());
+            if (bussinessprofile.isPresent()) {
+                businessData.setProvisioned(true);
+                businessData.SetFromBusinessProfile(bussinessprofile.get());
+            }
+
             return ResponseEntity.ok().body(businessData);
         }
         else {

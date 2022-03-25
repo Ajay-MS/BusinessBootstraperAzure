@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -13,12 +15,13 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Business {
 
-    @javax.persistence.Id
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
     private String Name;
-    private String Type;
+    private int Type;
 
-    public Business(long id, String name, String type) {
+    public Business(long id, String name, int type) {
         Id = id;
         Name = name;
         Type = type;

@@ -13,7 +13,8 @@ public class BusinessData {
 
     private long Id;
     private String Name;
-    private String Type;
+    private int Type;
+    private boolean isProvisioned;
     private String AdminURL;
     private String UserPortal;
     private String Metadata;

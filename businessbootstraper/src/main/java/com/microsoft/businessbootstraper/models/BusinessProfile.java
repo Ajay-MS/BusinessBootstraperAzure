@@ -17,6 +17,7 @@ public class BusinessProfile {
     private String AdminURL;
     private String UserPortal;
     private String Metadata;
+    private int scale;
 
     public BusinessProfile(long id, String adminURL, String userPortal, String metadata) {
         Id = id;
